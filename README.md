@@ -3,9 +3,15 @@
 [![Java Version](https://img.shields.io/badge/Java-SE%2017%2B%20%2F%2021-orange.svg)](https://www.oracle.com/java/)
 [![Build Status](https://img.shields.io/badge/Tests-11%2F11%20Passing-brightgreen.svg)]()
 [![Course Alignment](https://img.shields.io/badge/Course-Java%20%2F%20OOP-blue.svg)]()
-[![Evaluation](https://img.shields.io/badge/VITyarthi-Flipped%20Project-purple.svg)]()
+[![Course Code](https://img.shields.io/badge/Course%20Code-CSE2006-green.svg)]()
+[![Student](https://img.shields.io/badge/Author-Maddala%20Jashwanth%20(25BAI10796)-blue.svg)]()
 
 > **EduPulse** is a robust, modular University Academic and Course Management System developed in Java following clean Object-Oriented Design Principles and Architectural Patterns.
+> 
+> **Author:** Maddala Jashwanth  
+> **Registration No.:** 25BAI10796  
+> **Course:** Object-Oriented Programming (Java) | **Course Code:** CSE2006  
+> **Program:** B.Tech Computer Science and Engineering (AI & DS)  
 
 ---
 

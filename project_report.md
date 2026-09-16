@@ -17,12 +17,12 @@
     Object-Oriented Programming (Java)
 
     COURSE CODE:
-    CSE1007 / CSE2001
+    CSE2006
 
     SUBMITTED BY:
-    Student Name : [Your Name]
-    Register No. : [Your Registration Number]
-    Program      : B.Tech Computer Science and Engineering
+    Student Name : Maddala Jashwanth
+    Register No. : 25BAI10796
+    Program      : B.Tech Computer Science and Engineering (AI & DS)
     Institution  : School of Computing Science and Engineering (SCSE)
 
     SUBMITTED TO:
