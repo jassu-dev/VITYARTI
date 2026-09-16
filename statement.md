@@ -1,65 +1,60 @@
-# Project Problem Statement & Scope Document
+# Problem Statement and Project Scope
 
-## Project Title
-**EduPulse: Smart Academic & Course Management System**
+**Project Name:** EduPulse: Academic and Course Management System  
+**Student Name:** Maddala Jashwanth  
+**Registration Number:** 25BAI10796  
+**Course:** Object-Oriented Programming (Java)  
+**Course Code:** CSE2006  
+**Program:** B.Tech Computer Science and Engineering (AI & DS)  
 
 ---
 
 ## 1. Problem Statement
-In conventional university academic administration, course registration, prerequisite validation, grade evaluations, and academic audit calculations are frequently decoupled across disparate spreadsheets, outdated legacy portals, or manual approvals. This fragmented approach leads to several critical points of failure:
 
-1. **Prerequisite Violations**: Students occasionally enroll in advanced elective or core subjects without fulfilling the foundational course competencies, degrading learning outcomes.
-2. **Classroom & Laboratory Over-subscription**: Lack of real-time transactional synchronization results in enrollment beyond classroom physical capacities and instructor bandwidth.
-3. **Rigid & Disconnected Grading Scales**: Institutions often adopt differing evaluation frameworks (such as absolute 4.0 GPA scales versus weighted 10-point scales) without modular systems capable of dynamically switching and computing cumulative GPAs.
-4. **Lack of Transparent Academic Audits**: Students and advisors lack instant, verifiable academic transcripts reflecting real-time course completions, in-progress subjects, credit totals, and academic standing status.
+At university campuses, semester registration and grade tracking are often handled through disconnected systems or manual spreadsheets. This introduces several recurring practical issues:
 
-**EduPulse** provides a unified, object-oriented software solution that coordinates authentication, automated prerequisite tracking, dynamic capacity management, strategy-based evaluation, and persistent reporting into a single cohesive, high-performance architecture.
+1. **Students Enrolling Without Clearing Prerequisites:** Students frequently try to enroll in advanced core or elective subjects without passing the foundational course first. When checked manually, these cases get overlooked, causing academic difficulties later in the semester.
+2. **Classroom Over-Capacity:** When courses are opened for registration, popular slots fill up rapidly. Without automated real-time seat checks, classes exceed classroom capacity and lab desk limits.
+3. **Inconsistent Grading Calculations:** Calculating cumulative GPAs requires weighting each course by its credits. When institutions use different grading schemes (such as a 10-point scale versus a 4.0 scale), recalculating transcripts manually is prone to arithmetic mistakes.
+4. **Scattered Student Records:** Course instructors, students, and administration often keep separate records of marks and enrollments, leading to confusion during grade finalization and transcript generation.
+
+EduPulse was developed to solve these practical problems by providing a unified Java console application that automatically enforces prerequisite requirements, manages seat availability, handles role-based logins, and calculates credit-weighted GPAs accurately.
 
 ---
 
-## 2. Scope of the Project
+## 2. Project Scope
 
-### In-Scope:
-- **Role-Based Authentication & Session Management**: Secure SHA-256 hashed password verification with distinct privilege sets for System Administrators, Instructors, and Students.
-- **Academic Catalog & Course Management**: Defining courses with credit weightings, departmental categorization, seat limits, assigned faculty, and prerequisite graphs.
-- **Transactional Enrollment Engine**: Real-time validation checking student eligibility, missing prerequisites, seat capacity, duplicate registrations, and max term credit limits.
-- **Pluggable Evaluation Strategies**: Decoupled grading algorithms (Standard 4.0 scale and VIT 10-point Honors scale) with automatic weighted CGPA recalculation upon grade entry.
-- **Audit Reports & Transcripts**: Instant generation of official academic transcripts, course-level statistical distributions (averages, pass rates, grade histograms), and executive administrative summaries.
-- **Data Persistence**: Thread-safe binary object serialization maintaining data durability across application restarts without third-party database dependencies.
+### Features Implemented:
+- **Authentication and Roles:** Three distinct roles (Administrator, Instructor, Student) with passwords stored securely using SHA-256 hashing.
+- **Course Catalog Management:** Creating courses, specifying credit counts (1 to 6 credits), setting maximum seat capacities, and assigning faculty members.
+- **Prerequisite Validation:** Setting prerequisite rules between subjects, preventing circular dependencies, and verifying a student's completed courses before permitting enrollment.
+- **Enrollment and Seat Management:** Real-time seat allocation, duplicate enrollment checks, maximum course registration limits (up to 6 per term), and course dropping with automatic seat restoration.
+- **Evaluation and Grading:** Faculty can submit scores (0 to 100), and the system maps them to letter grades using either the VIT 10-point scale or standard 4.0 scale, automatically updating the student's cumulative GPA.
+- **Transcripts and Analytics:** Printing official academic transcripts with academic standing classification, and course-level statistics (class average, highest/lowest marks, pass rate, and grade count).
+- **Data Persistence:** Automatic saving and loading of all users, courses, and registrations to local `.dat` files via Java serialization.
 
-### Out-of-Scope (Future Enhancements):
-- Direct payment gateway integration for tuition and lab fees.
-- Real-time biometric attendance hardware integration.
-- Distributed microservices architecture with cloud pub/sub messaging.
+### Items Outside Current Scope:
+- Online fee payment gateway integration.
+- Graphical user interface (GUI) or web front-end (currently focused on clean console interface and OOP design).
+- Integration with external university database servers like Oracle or MySQL.
 
 ---
 
 ## 3. Target Users
 
-| Target User Group | Primary Persona | System Touchpoints & Needs |
+| User Group | Typical Persona | How They Use the System |
 | :--- | :--- | :--- |
-| **Academic Administrators** | University Registrars, Department Heads | Needs macro-level visibility into institutional enrollment counts, course creation, prerequisite graph assignment, instructor allocations, and grading scheme toggles. |
-| **Faculty & Instructors** | Course Coordinators, Professors, TAs | Needs tools to view real-time class rosters, inspect student prerequisites, input numerical evaluation scores, and analyze cohort grade distribution histograms. |
-| **Students** | Undergraduate & Postgraduate Learners | Needs intuitive interfaces to browse catalog offerings, register/drop courses safely, view academic progress, and download official academic transcripts. |
+| **Administrators** | Academic Registrar / Department Staff | Creates new courses, defines prerequisite rules, assigns instructors to courses, registers new students/faculty, switches grading scales, and views institutional reports. |
+| **Instructors / Faculty** | Course Professors / Teaching Faculty | Checks class rosters of enrolled students, enters evaluation marks for each student, and views cohort score distributions and averages. |
+| **Students** | Undergraduate / Postgraduate Students | Checks personal details and current CGPA, browses available courses and prerequisites, registers for eligible courses, drops courses if needed, and prints academic transcripts. |
 
 ---
 
 ## 4. High-Level Features
 
-1. **Role-Based Security Layer**:
-   - Encrypted credential validation.
-   - Dynamic polymorphic user representation (`User`, `Student`, `Instructor`, `Administrator`).
-2. **Curriculum Engine**:
-   - Course creation with invariant validation.
-   - Directed prerequisite dependency management preventing circular prerequisites.
-3. **Smart Enrollment Orchestrator**:
-   - Concurrency-safe atomic enrollment and drop operations.
-   - Real-time seat reservation and capacity enforcement.
-4. **Strategy-Driven Grading Core**:
-   - Interchangeable grading strategies (`GradingStrategy` interface) permitting run-time switching between 10.0 and 4.0 scales.
-   - Automatic credit-weighted cumulative GPA derivation.
-5. **Academic Intelligence & Reporting**:
-   - Formatted Official Transcripts with Dean's Honor Roll distinction logic.
-   - Course-level analytics with mean, max, min, and pass-rate calculations.
-6. **Built-in Quality Assurance**:
-   - Self-diagnosing automated regression test suite validating domain integrity.
+1. **Security & Authentication Module:** User login with password verification, role identification, and session tracking.
+2. **Course & Curriculum Module:** Subject management with credit weighting, capacity tracking, and prerequisite enforcement.
+3. **Enrollment & Registration Engine:** Real-time validation for seat limits, prerequisite verification, and duplicate check.
+4. **Grading & Academic Engine:** Strategy-based score conversion, automated weighted GPA calculations, and grade history updates.
+5. **Reporting & Analytics Engine:** Formatted transcripts, course-level statistics, and administrative summaries.
+6. **Automated Test Suite:** Built-in self-test verifying all core business logic without external testing frameworks.

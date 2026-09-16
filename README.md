@@ -1,165 +1,158 @@
-# EduPulse: Smart Academic & Course Management System
+# EduPulse: Academic and Course Management System
 
-[![Java Version](https://img.shields.io/badge/Java-SE%2017%2B%20%2F%2021-orange.svg)](https://www.oracle.com/java/)
-[![Build Status](https://img.shields.io/badge/Tests-11%2F11%20Passing-brightgreen.svg)]()
-[![Course Alignment](https://img.shields.io/badge/Course-Java%20%2F%20OOP-blue.svg)]()
-[![Course Code](https://img.shields.io/badge/Course%20Code-CSE2006-green.svg)]()
-[![Student](https://img.shields.io/badge/Author-Maddala%20Jashwanth%20(25BAI10796)-blue.svg)]()
+A Java-based course enrollment and academic administration system built for the CSE2006 Object-Oriented Programming flipped course evaluation.
 
-> **EduPulse** is a robust, modular University Academic and Course Management System developed in Java following clean Object-Oriented Design Principles and Architectural Patterns.
-> 
-> **Author:** Maddala Jashwanth  
-> **Registration No.:** 25BAI10796  
-> **Course:** Object-Oriented Programming (Java) | **Course Code:** CSE2006  
-> **Program:** B.Tech Computer Science and Engineering (AI & DS)  
+**Author:** Maddala Jashwanth  
+**Registration Number:** 25BAI10796  
+**Course:** Object-Oriented Programming (Java)  
+**Course Code:** CSE2006  
+**Program:** B.Tech Computer Science and Engineering (AI & DS)  
+**Institution:** School of Computing Science and Engineering (SCSE), VIT  
 
 ---
 
-## 1. Overview
-In contemporary higher education, institutions face significant challenges coordinating course enrollments, enforcing academic prerequisites, managing course capacities, computing weighted grade point averages (GPA/CGPA), and maintaining audit trails. 
+## 1. Project Overview
 
-**EduPulse** solves these challenges by providing a secure, role-tailored academic management engine. Built strictly adhering to Object-Oriented Programming (OOP) paradigms, the system implements:
-- **Encapsulation & Abstraction** via strict domain invariants and generic persistence abstractions.
-- **Inheritance & Polymorphism** through extensible user roles (`Student`, `Instructor`, `Administrator`) and interchangeable evaluation schemes.
-- **Design Patterns**: Singleton, Factory Method, Strategy Pattern, and Repository (DAO) Pattern.
-- **Durability**: Auto-flushing binary file serialization ensuring zero data loss without requiring external SQL dependencies.
+EduPulse is a console-based university management application designed to handle student course registrations, academic records, and grade evaluations. During semester registrations, colleges face recurring issues with students taking subjects without clearing prerequisites, classrooms exceeding seat limits, and calculating weighted GPAs across different courses.
+
+This project was built to address those exact requirements while demonstrating core Object-Oriented Programming concepts in Java:
+- Abstract classes and inheritance for user roles (Students, Instructors, Administrators).
+- Dynamic polymorphism for role-based behaviors and interchangeable grading scales.
+- Encapsulation to protect academic records and course rosters.
+- Design patterns including Factory Method, Strategy, Singleton, and Repository (DAO).
+- File persistence using standard Java serialization so data remains saved between program restarts without needing an external database setup.
 
 ---
 
 ## 2. Key Features
 
-### 👤 Role-Based Access Control (RBAC)
-- **Administrator**: Create courses, set prerequisites, assign instructors, manage user registrations, toggle institutional grading schemes, view system executive analytics.
-- **Instructor / Faculty**: View assigned sections, view class rosters, evaluate submissions, submit numerical grades, inspect course statistical distributions.
-- **Student**: View personalized academic profile, register for courses with automatic prerequisite checks, drop courses with automatic seat de-allocation, inspect real-time CGPA and official academic transcripts.
+### Role-Based Access Control
+- **Administrator:** Can add new courses, set prerequisite rules between subjects, assign instructors, register students or faculty, switch the university grading scheme, and view overall system enrollment stats.
+- **Instructor / Faculty:** Can view assigned courses, inspect class rosters of enrolled students, input marks (0 to 100) for evaluations, and view class statistics like averages and grade distributions.
+- **Student:** Can view personal profile and current CGPA, browse the course catalog, enroll in courses (with automatic prerequisite checks), drop courses, and generate an official academic transcript.
 
-### 📚 Curriculum & Prerequisite Enforcement
-- Automated prerequisite verification preventing enrollment if prerequisite courses are incomplete.
-- Dynamic course capacity limits with strict concurrency safety.
-- Hard credit limits preventing student overloads (max 6 courses per term).
+### Prerequisite and Seat Management
+- Automatic validation ensures a student has cleared prerequisite subjects before enrolling in advanced courses.
+- Course capacity limits prevent over-subscription; seats are freed automatically when a student drops a course.
+- Term credit limits prevent students from taking more than 6 courses at a time.
 
-### 📐 Pluggable Grading Engine (Strategy Pattern)
-- **VIT 10-Point Honors Scale**: S (10.0), A (9.0), B (8.0), C (7.0), D (6.0), E (5.0), F (0.0).
-- **Standard University 4.0 Scale**: A+ (4.0), A (3.7), B (3.0), C (2.5), D (2.0), F (0.0).
-- Automatic weighted CGPA computation factoring in individual course credit weights.
+### Flexible Grading System (Strategy Pattern)
+- Supports both the VIT 10-point scale (S, A, B, C, D, E, F) and a standard 4.0 GPA scale.
+- Automatically calculates weighted CGPA based on individual course credit values.
 
-### 📊 Comprehensive Analytics & Audit Reporting
-- Official Academic Transcript generation with standing categorization (Dean's Honor List, Good Standing, Academic Review).
-- Course performance analytics with class average, maximum/minimum scores, pass percentages, and ASCII histogram grade distributions.
-
----
-
-## 3. Technologies & Architecture
-
-- **Language**: Java SE 17+ (Tested on Java 21 & Java 26)
-- **Paradigm**: Object-Oriented Programming (OOP), Domain-Driven Design (DDD)
-- **Patterns**:
-  - `Factory Method`: `UserFactory` encapsulates polymorphic user instantiations.
-  - `Strategy Pattern`: `GradingStrategy`, `HonorsGradingStrategy`, `StandardGradingStrategy`.
-  - `Singleton Pattern`: `ConfigManager` maintains unified runtime configurations.
-  - `Repository Pattern`: Generic `Repository<T, ID>` with file-backed persistence.
-- **Security**: SHA-256 password hashing via `SecurityUtils`.
-- **Testing**: Dedicated standalone automated unit and regression test runner (`SystemValidationTest`).
+### Persistence and Test Automation
+- Saves all user accounts, courses, and enrollments to `.dat` files using binary serialization.
+- Built-in automated test suite covering 11 unit and integration test cases.
 
 ---
 
-## 4. Project Structure
+## 3. Project Structure
 
 ```
 VITYARTI_PROJECT/
-├── README.md                      # Comprehensive project documentation
-├── statement.md                   # Problem statement & scope document
-├── project_report.md              # Detailed academic report (Markdown source)
-├── Project_Report.pdf             # Formatted 15-section PDF report for portal upload
-├── data/                          # Persistent data directory (.dat files)
-├── bin/                           # Compiled Java bytecode
-└── src/
-    └── com/vityarthi/academic/
-        ├── Main.java              # Application bootstrap & entry point
-        ├── model/                 # Domain entities
-        │   ├── Role.java          # Role enumeration
-        │   ├── User.java          # Abstract user base entity
-        │   ├── Student.java       # Polymorphic Student entity
-        │   ├── Instructor.java    # Polymorphic Instructor entity
-        │   ├── Administrator.java # Polymorphic Admin entity
-        │   ├── Course.java        # Course domain entity
-        │   ├── Grade.java         # Grade value object
-        │   └── Enrollment.java    # Student course registration entity
-        ├── factory/
-        │   └── UserFactory.java   # Factory Pattern for user creation
-        ├── strategy/
-        │   ├── GradingStrategy.java       # Strategy interface
-        │   ├── StandardGradingStrategy.java # 4.0 scale strategy
-        │   └── HonorsGradingStrategy.java   # 10.0 scale strategy
-        ├── repository/
-        │   ├── Repository.java             # Generic Repository interface
-        │   ├── FileUserRepository.java     # User file persistence
-        │   ├── FileCourseRepository.java   # Course file persistence
-        │   └── FileEnrollmentRepository.java # Enrollment file persistence
-        ├── service/
-        │   ├── AuthenticationService.java  # Session & Auth business logic
-        │   ├── CourseService.java          # Curriculum & assignment logic
-        │   ├── EnrollmentService.java      # Registration & grading logic
-        │   └── ReportService.java          # Transcripts & analytics generator
-        ├── exception/
-        │   ├── AcademicException.java      # Custom root checked exception
-        │   ├── AuthenticationException.java # Auth failures
-        │   ├── CourseFullException.java    # Capacity constraint violations
-        │   ├── PrerequisiteNotMetException.java # Prerequisite failures
-        │   ├── EntityNotFoundException.java # Missing entity lookups
-        │   └── ValidationException.java    # Input validation failures
-        ├── util/
-        │   ├── ConfigManager.java          # Singleton system configuration
-        │   ├── SecurityUtils.java          # SHA-256 cryptographic hashing
-        │   └── DataInitializer.java       # Benchmark sample data seeder
-        ├── ui/
-        │   └── ConsoleUI.java              # Interactive multi-role CLI interface
-        └── test/
-            └── SystemValidationTest.java   # Automated unit & integration test runner
+|-- README.md                      # Project documentation and setup guide
+|-- statement.md                   # Problem statement, scope, and user analysis
+|-- project_report.md              # Complete 15-section project report
+|-- Project_Report.pdf             # Formatted academic report for portal submission
+|-- data/                          # Data files storing serialized state
+|-- bin/                           # Compiled Java bytecode
+`-- src/
+    `-- com/vityarthi/academic/
+        |-- Main.java              # Main application entry point
+        |-- model/                 # Domain entity classes
+        |   |-- Role.java          # Enum for user roles
+        |   |-- User.java          # Abstract base user class
+        |   |-- Student.java       # Student entity
+        |   |-- Instructor.java    # Faculty instructor entity
+        |   |-- Administrator.java # System admin entity
+        |   |-- Course.java        # Course details and roster
+        |   |-- Grade.java         # Grade value object
+        |   `-- Enrollment.java    # Registration record
+        |-- factory/
+        |   `-- UserFactory.java   # Factory method for user creation
+        |-- strategy/
+        |   |-- GradingStrategy.java         # Grading strategy interface
+        |   |-- StandardGradingStrategy.java # 4.0 grading scale
+        |   `-- HonorsGradingStrategy.java   # VIT 10-point scale
+        |-- repository/
+        |   |-- Repository.java              # Generic repository interface
+        |   |-- FileUserRepository.java      # User data access
+        |   |-- FileCourseRepository.java    # Course data access
+        |   `-- FileEnrollmentRepository.java# Enrollment data access
+        |-- service/
+        |   |-- AuthenticationService.java   # Login and registration logic
+        |   |-- CourseService.java           # Course management logic
+        |   |-- EnrollmentService.java       # Enrollment and grading logic
+        |   `-- ReportService.java           # Transcript and report generator
+        |-- exception/
+        |   |-- AcademicException.java       # Base custom checked exception
+        |   |-- AuthenticationException.java # Invalid login credentials
+        |   |-- CourseFullException.java     # Class capacity reached
+        |   |-- PrerequisiteNotMetException.java # Missing prerequisite
+        |   |-- EntityNotFoundException.java # Missing record lookup
+        |   `-- ValidationException.java     # Invalid user input
+        |-- util/
+        |   |-- ConfigManager.java           # Singleton system configuration
+        |   |-- SecurityUtils.java           # SHA-256 password hashing
+        |   `-- DataInitializer.java        # Default seed records
+        |-- ui/
+        |   `-- ConsoleUI.java               # Interactive menu interface
+        `-- test/
+            `-- SystemValidationTest.java    # 11 automated unit test cases
 ```
 
 ---
 
-## 5. Installation & Execution Guide
+## 4. How to Compile and Run
 
 ### Prerequisites
-- Java Development Kit (JDK 17 or higher) installed and configured in `PATH`.
+- JDK 17 or above installed and configured in your system `PATH`.
 - Git installed.
 
-### Step 1: Compile the Project
-Open a terminal (PowerShell, Command Prompt, or Bash) in the project root:
-
+### Step 1: Open Terminal
+Open PowerShell or Command Prompt in the project folder:
 ```powershell
-# Create bin directory and compile all source files
+cd c:\Users\madda\Documents\VITYARTI_PROJECT
+```
+
+### Step 2: Compile
+Compile all Java files into the `bin` directory:
+```powershell
 javac -d bin (Get-ChildItem -Path src -Filter *.java -Recurse | ForEach-Object { $_.FullName })
 ```
-*(On Linux/macOS: `javac -d bin $(find src -name "*.java")`)*
 
-### Step 2: Run the Application
+### Step 3: Run the Application
+Start the interactive console system:
 ```powershell
 java -cp bin com.vityarthi.academic.Main
 ```
 
-### Pre-Seeded Demo Credentials
-| Role | User ID / Login | Password | Notes |
-| :--- | :--- | :--- | :--- |
-| **Administrator** | `admin` | `admin123` | System Registrar with full administrative privileges |
-| **Faculty** | `prof_smith` | `prof123` | Dr. Alan Smith (Teaches CSE1001, CSE2001) |
-| **Faculty** | `prof_jones` | `prof123` | Dr. Sarah Jones (Teaches CSE2002, CSE3001) |
-| **Student** | `23BCE0001` | `stu123` | Aditya Sharma (Has completed CSE1001, CGPA: 10.0) |
-| **Student** | `23BCE0003` | `stu123` | Rahul Verma (Fresh student, eligible for intro courses) |
-
----
-
-## 6. Running Automated Tests
-
-EduPulse includes a built-in automated test suite covering 11 critical test cases across all business domains:
-
+### Step 4: Run Automated Tests
+Run the built-in diagnostic test suite:
 ```powershell
 java -cp bin com.vityarthi.academic.Main --test
 ```
 
-### Test Suite Execution Output
+---
+
+## 5. Demo Login Credentials
+
+The system comes pre-loaded with sample records for testing:
+
+| Role | Username / ID | Password | Description |
+| :--- | :--- | :--- | :--- |
+| Administrator | admin | admin123 | System administrator (Registrar) |
+| Faculty | prof_smith | prof123 | Dr. Alan Smith (Teaches CSE1001, CSE2001) |
+| Faculty | prof_jones | prof123 | Dr. Sarah Jones (Teaches CSE2002, CSE3001) |
+| Student | 23BCE0001 | stu123 | Aditya Sharma (Cleared CSE1001, has CGPA 10.0) |
+| Student | 23BCE0003 | stu123 | Rahul Verma (New student, can test prerequisite checks) |
+
+---
+
+## 6. Test Suite Results
+
+Running `java -cp bin com.vityarthi.academic.Main --test` runs all 11 test cases:
+
 ```
 ------------------------------------------------------------
   STARTING AUTOMATED UNIT & INTEGRATION TEST SUITE
@@ -179,45 +172,4 @@ java -cp bin com.vityarthi.academic.Main --test
 ------------------------------------------------------------
   TEST EXECUTION SUMMARY: 11 / 11 PASSED (100.0% SUCCESS)
 ------------------------------------------------------------
-```
-
----
-
-## 7. Interactive CLI Workflow Preview
-
-### Official Student Transcript Sample Output
-```
-========================================================================================
-                     OFFICIAL ACADEMIC TRANSCRIPT - VIT Bhopal / VITyarthi University
-========================================================================================
-Student Name : Aditya Sharma                  Student ID : 23BCE0001
-Major        : B.Tech Computer Science        Semester   : 3
-Email        : aditya.s@vityarthi.edu         Active Term: Fall 2026-27
-----------------------------------------------------------------------------------------
-CODE       COURSE TITLE                     CREDITS  SCORE      GRADE      STATUS    
-----------------------------------------------------------------------------------------
-CSE2001    Object Oriented Programming...   4        94.5%      S          COMPLETED 
-CSE2002    Data Structures & Algorithms     4        N/A        In-Prog    ENROLLED  
-----------------------------------------------------------------------------------------
-Total Attempted Credits: 8 | Total Earned Credits: 4 | Cumulative GPA: 10.00
-Academic Standing: Dean's Honor List / Distinction
-========================================================================================
-```
-
-### Course Performance Analytics Sample Output
-```
-========================================================================================
-                    COURSE ANALYTICS & GRADE AUDIT: CSE2001
-========================================================================================
-Title: Object Oriented Programming (Java) | Credits: 4 | Dept: SCSE
-Instructor: prof_smith | Capacity: 3 | Enrolled: 2 | Available Seats: 1
-----------------------------------------------------------------------------------------
-Graded Submissions : 1
-Class Average Score: 94.50%
-Highest Score      : 94.50%
-Lowest Score       : 94.50%
-Pass Rate          : 100.0% (1 passed / 1 graded)
-Grade Distribution :
-  Grade S   : * (1)
-========================================================================================
 ```

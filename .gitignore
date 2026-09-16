@@ -11,3 +11,6 @@ Thumbs.db
 *.iml
 .idea/
 .vscode/
+
+# Helper script for PDF generation
+generate_pdf.py

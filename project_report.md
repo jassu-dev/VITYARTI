@@ -1,4 +1,4 @@
-# PROJECT REPORT
+# Project Report: EduPulse Academic and Course Management System
 
 ---
 
@@ -11,7 +11,7 @@
 ========================================================================================
 
     PROJECT TITLE:
-    EduPulse: Smart Academic & Course Management System
+    EduPulse: Academic and Course Management System
 
     COURSE NAME:
     Object-Oriented Programming (Java)
@@ -38,80 +38,81 @@
 ---
 
 ## 2. Introduction
-In modern academic ecosystems, managing courses, registrations, prerequisite chains, and student academic evaluations is a core operational necessity. Without automated controls, universities encounter scheduling conflicts, class overcrowding, and compromised educational quality resulting from prerequisite non-compliance.
 
-**EduPulse: Smart Academic & Course Management System** is an enterprise-grade Java application constructed around foundational and advanced principles of **Object-Oriented Programming (OOP)**. The system models an academic administrative domain featuring multi-role security (Administrators, Instructors, Students), dynamic prerequisite graph validation, concurrency-safe capacity bounds, strategy-driven grading calculations, and durable file-based persistence.
+Managing student course registrations, tracking prerequisites, ensuring class sizes stay within room capacities, and calculating semester GPAs are fundamental operational tasks in every academic institution. When these processes are handled manually or across fragmented spreadsheets, colleges encounter frequent data entry mistakes, students taking advanced courses without foundational knowledge, and errors in calculating weighted GPAs.
 
-The architecture strictly adheres to standard software design patterns including **Factory Method**, **Strategy Pattern**, **Singleton Pattern**, and **Repository Pattern (DAO)**, creating a decoupled, maintainable, and extensible codebase.
+The purpose of this project, **EduPulse**, is to build a reliable, modular, and object-oriented academic management application in pure Java. Developed as part of the flipped learning evaluation for **CSE2006 Object-Oriented Programming**, the system implements a role-based console application for Administrators, Faculty, and Students.
+
+The application emphasizes clean Object-Oriented Programming (OOP) design:
+- **Encapsulation:** Keeping all critical fields private with strict validation on mutators.
+- **Inheritance & Polymorphism:** Establishing a base `User` class extended by `Student`, `Instructor`, and `Administrator` with dynamic method dispatch.
+- **Abstraction:** Generic repository interfaces (`Repository<T, ID>`) and grading interfaces (`GradingStrategy`).
+- **Design Patterns:** Factory Method, Strategy Pattern, Singleton Pattern, and Data Access Object (DAO) Repository Pattern.
+- **Data Persistence:** Using Java binary serialization to persist state between runs without third-party database dependencies.
 
 ---
 
 ## 3. Problem Statement
-Manual or loosely coupled academic recording systems suffer from fundamental structural vulnerabilities:
-1. **Prerequisite Integrity Failure**: Students routinely register for advanced subjects without successfully completing the prerequisite courses, resulting in high attrition.
-2. **Seat Limit Inconsistencies**: Without synchronized transaction management, courses frequently become oversubscribed, violating physical classroom and faculty-to-student ratio norms.
-3. **Inflexible Grading Paradigms**: Academic institutions require adaptability to grade students under varied frameworks (e.g. 10.0 scale vs. 4.0 scale). Hard-coded grading logic makes transitioning or supporting different scales cumbersome.
-4. **Data Isolation & Traceability**: Student records, instructor evaluations, and course histories often exist across disparate files without a unified data schema or audit trail.
 
-**EduPulse** rectifies these challenges by establishing an integrated, object-oriented engine with strict domain boundaries, automated validation checks, and role-tailored workflows.
+At modern academic institutions, course registration and grade tracking systems often face the following practical challenges:
+
+1. **Prerequisite Violations:** Students often attempt to enroll in advanced courses without passing foundational prerequisites. Manual checks are prone to human oversight.
+2. **Classroom Capacity Over-Subscription:** Popular course sections fill up quickly. Without automated real-time seat tracking, student enrollments can exceed available room seats.
+3. **Complex Grade and GPA Calculations:** Different degree programs or institutions alternate between 10-point and 4.0 grading scales. Calculating credit-weighted cumulative GPAs by hand often causes arithmetic inconsistencies.
+4. **Data Disconnection Across Departments:** Faculty mark sheets, student enrollment lists, and administrator master records are often maintained separately, causing synchronization issues.
+
+EduPulse addresses these issues by combining authentication, course catalog management, prerequisite verification, dynamic seat reservation, and automatic GPA calculations into one cohesive Java application.
 
 ---
 
 ## 4. Functional Requirements
 
-The system provides 5 primary functional modules, exceeding the baseline requirement of 3:
+The system implements 5 functional modules (exceeding the required minimum of 3):
 
-### 4.1 Module 1: Authentication & Role-Based Access Control (RBAC)
-- **User Authentication**: Login via User ID or registered Email address verified against SHA-256 cryptographic hashes.
-- **Role Differentiation**: Automatic dispatch to role-specific dashboards for Administrator, Faculty Instructor, and Student.
-- **Session Management**: Secure tracking of authenticated user context and state.
+### 4.1 Module 1: Authentication and Role-Based Access Control (RBAC)
+- **Secure Authentication:** Users log in using either their User ID or registered Email address. Passwords are verified against SHA-256 cryptographic hashes.
+- **Role-Based Menus:** Upon successful login, users are routed to tailored dashboards:
+  - Administrator Console
+  - Faculty Instructor Dashboard
+  - Student Portal
+- **Session State:** Maintains active session information with full logout capability.
 
-### 4.2 Module 2: Course Catalog & Curriculum Management
-- **Course Authoring**: Administrator capability to define courses specifying unique course code, title, credit weighting (1-6), department, max capacity, and faculty assignment.
-- **Prerequisite Graph Management**: Ability to attach prerequisite dependencies to any course with circular dependency prevention.
-- **Faculty Course Assignment**: Dynamic linking between courses and qualified instructors.
+### 4.2 Module 2: Course Catalog and Curriculum Management
+- **Course Creation:** Administrators can add new courses with details including Course Code, Title, Credits (1 to 6), Department, Maximum Capacity, and Assigned Faculty.
+- **Prerequisite Definition:** Administrators can link prerequisite courses to an existing course, with automatic detection to prevent circular prerequisite dependencies.
+- **Faculty Assignment:** Assigning qualified instructors to courses and displaying assigned courses in faculty dashboards.
 
-### 4.3 Module 3: Registration & Enrollment Engine
-- **Prerequisite Validation**: Dynamic verification that the student has earned passing credit in all prerequisite courses before granting registration.
-- **Capacity Enforcement**: Atomic seat checks rejecting enrollments when a course section reaches max capacity.
-- **Credit Limit & Duplicate Check**: Enforces maximum term registration limits (up to 6 courses) and prevents duplicate enrollments.
-- **Course Withdrawal / Drop**: Enables students to drop active courses, automatically freeing seat capacity in the course catalog.
+### 4.3 Module 3: Student Registration and Enrollment Engine
+- **Prerequisite Check:** Enforces that a student must have completed and passed all prerequisites before enrolling.
+- **Capacity Enforcement:** Blocks registration if the course has reached its maximum seat capacity.
+- **Credit Limit & Duplicate Check:** Restricts students to a maximum of 6 concurrent courses per term and rejects duplicate enrollments.
+- **Course Drop Lifecycle:** Allows students to drop an active course, which automatically restores seat capacity for other students.
 
-### 4.4 Module 4: Evaluation & Grading Engine
-- **Grade Submission**: Instructors submit numerical percentage scores (0.0 - 100.0) for enrolled students in their assigned courses.
-- **Strategy-Driven Evaluation**: Scores are dynamically evaluated into letter grades and grade points based on the active institutional strategy (`HonorsGradingStrategy` or `StandardGradingStrategy`).
-- **Cumulative GPA Derivation**: Automated credit-weighted CGPA computation updated immediately upon grade recording.
+### 4.4 Module 4: Evaluation and Grading Engine
+- **Score Entry:** Faculty can record numerical marks (0.0 to 100.0) for students in their assigned courses.
+- **Dynamic Grading Scale (Strategy Pattern):** Evaluates percentage marks into letter grades using either the VIT 10-point scale or the standard 4.0 scale.
+- **Automatic GPA Derivation:** Automatically updates the student's cumulative GPA across all completed credits upon grade submission.
 
-### 4.5 Module 5: Analytics & Academic Reporting Engine
-- **Official Transcript Generation**: Generates comprehensive transcripts detailing completed and in-progress courses, credit tallies, CGPA, and Academic Standing.
-- **Course Performance Analytics**: Computes statistical summaries including class average, minimum/maximum scores, pass rate percentages, and grade distribution histograms.
-- **System Executive Summary**: Institutional report showing macro-level metrics across all users, courses, and seat occupancy.
+### 4.5 Module 5: Transcripts and Academic Analytics
+- **Official Transcript Generation:** Produces a formatted student transcript displaying all attempted courses, credits, numerical marks, letter grades, status, total earned credits, and CGPA.
+- **Course Analytics:** Produces class statistics including total graded submissions, average marks, highest/lowest scores, pass rates, and an ASCII grade distribution histogram.
+- **Institutional Summary:** Displays a system-wide overview of total registered users, courses, and seat occupancy rates.
 
 ---
 
 ## 5. Non-Functional Requirements
 
-### 5.1 Usability
-- The user interface is driven by a clean, formatted terminal console featuring organized ASCII menus, structured tables, and intuitive input prompts.
-- Informative, user-friendly error messages guide the user whenever operations fail.
-
-### 5.2 Security & Data Integrity
-- Passwords are never stored in plaintext; all user credentials undergo SHA-256 hashing.
-- Encapsulation guarantees that internal model states (such as course rosters and completed credits) cannot be modified from outside validated domain methods.
-
-### 5.3 Reliability & Durability
-- The application implements file-backed persistence utilizing Java Object Serialization.
-- Repositories automatically flush state to disk upon modification, ensuring zero data loss upon application restart.
-
-### 5.4 Maintainability & Extensibility
-- Clean separation of concerns following a layered architecture: Model $\rightarrow$ Repository $\rightarrow$ Service $\rightarrow$ UI.
-- Polymorphic design ensures new user roles or alternative grading scales can be added without altering existing business logic.
+1. **Performance:** All in-memory lookups use `ConcurrentHashMap`, ensuring O(1) response times during student catalog lookups and registrations.
+2. **Security:** Passwords are never stored in plaintext; SHA-256 hashing is enforced through a centralized `SecurityUtils` utility.
+3. **Usability:** The console interface uses formatted tables, clean separation lines, and clear error prompts to guide users through each action.
+4. **Reliability and Data Durability:** Binary object serialization (`users.dat`, `courses.dat`, `enrollments.dat`) automatically flushes to disk after modifications, ensuring zero data loss upon application exit.
+5. **Maintainability and Extensibility:** Decoupled layered architecture (Model, Repository, Service, UI) allows replacing the file storage layer with a relational SQL database without modifying business logic.
 
 ---
 
 ## 6. System Architecture
 
-EduPulse follows a robust **Four-Tier Layered Architecture**:
+The project follows a standard **Four-Tier Layered Architecture**:
 
 ```
 +-------------------------------------------------------------------------+
@@ -156,79 +157,83 @@ EduPulse follows a robust **Four-Tier Layered Architecture**:
 ### 7.1 Use Case Diagram
 
 ```
-                              +-------------------------------------------+
-                              |         EduPulse Academic System          |
-                              +-------------------------------------------+
-                                                    |
-            +---------------------------------------+---------------------------------------+
-            |                                       |                                       |
-            v                                       v                                       v
-     (( Administrator ))                     (( Instructor ))                         (( Student ))
-            |                                       |                                       |
-            +--> [ Login ]                          +--> [ Login ]                          +--> [ Login ]
-            +--> [ Create Course ]                  +--> [ View Assigned Courses ]          +--> [ View Academic Profile ]
-            +--> [ Set Prerequisites ]              +--> [ View Course Roster ]             +--> [ Browse Catalog ]
-            +--> [ Assign Instructor ]              +--> [ Submit Grades ]                  +--> [ Register for Course ]
-            +--> [ Register New User ]              +--> [ View Course Analytics ]          +--> [ Drop Course ]
-            +--> [ Toggle Grading Scale ]           +--> [ Logout ]                         +--> [ View Official Transcript ]
-            +--> [ View System Summary ]                                                    +--> [ Logout ]
-            +--> [ Logout ]
+                     EduPulse Academic Management System
++-------------------------------------------------------------------------+
+| [Administrator]   --> (Login)                                           |
+|                   --> (Create Course & Set Prerequisite Rules)          |
+|                   --> (Assign Faculty to Course)                        |
+|                   --> (Register New Users)                              |
+|                   --> (Toggle Institutional Grading Strategy Scheme)    |
+|                   --> (View System Executive Report)                    |
+|                                                                         |
+| [Instructor]      --> (Login)                                           |
+|                   --> (View Assigned Course Sections)                   |
+|                   --> (Inspect Course Roster)                           |
+|                   --> (Submit Numerical Scores / Evaluate Grades)       |
+|                   --> (Inspect Course Analytics & Histograms)           |
+|                                                                         |
+| [Student]         --> (Login)                                           |
+|                   --> (View Academic Profile & Completed Credits)       |
+|                   --> (Browse Catalog with Prerequisites)               |
+|                   --> (Register for Eligible Courses)                   |
+|                   --> (Drop In-Progress Courses)                        |
+|                   --> (Generate & View Official Academic Transcript)    |
++-------------------------------------------------------------------------+
 ```
 
 ### 7.2 Process Flow / Workflow Diagram
 
 ```
-[Start Application]
-        |
-        v
-[Initialize Repositories & Load Data Files]
-        |
-        v
-[Is Database Empty?] --YES--> [DataInitializer seeds benchmark records]
-        |                                       |
-        +<--------------------------------------+
-        v
-[Display Guest Menu]
-        |
-        +---> [1. Login] ------------> [Validate SHA-256 Credentials]
-        |                                       |
-        |                         +-------------+-------------+
-        |                         |             |             |
-        |                         v             v             v
-        |                     (Admin)     (Instructor)    (Student)
-        |                     Console       Console        Console
-        |
-        +---> [2. Browse Catalog] ----> [Display Courses & Prerequisites]
-        |
-        +---> [3. Run Test Suite] ----> [Execute 11 Automated System Tests]
-        |
-        +---> [4. Exit] --------------> [Flush Data & Terminate]
+[System Launch]
+      |
+      v
+[Initialize Repositories & Load Data Files (.dat)]
+      |
+      v
+[Is Fresh Database?] --YES--> [DataInitializer seeds benchmark records]
+      |
+      v
+[Display Interactive Guest Menu]
+      |
+      +---> [1. User Login] ----------> [Verify SHA-256 Hash]
+      |                                        |
+      |                          +-------------+-------------+
+      |                          |             |             |
+      |                          v             v             v
+      |                      (Admin)      (Instructor)    (Student)
+      |                      Dashboard     Dashboard      Dashboard
+      |
+      +---> [2. Browse Catalog] ------> [Display Courses, Seats & Prerequisites]
+      |
+      +---> [3. Run Diagnostics] -----> [Execute 11 Automated System Tests]
+      |
+      +---> [4. Exit Application] ----> [Flush In-Memory Stores & Terminate]
 ```
 
-### 7.3 Sequence Diagram (Student Course Registration with Prerequisite Check)
+### 7.3 Sequence Diagram: Student Course Enrollment Flow
 
 ```
-Student               ConsoleUI           EnrollmentService       CourseRepo       Student (Model)
-   |                      |                       |                    |                  |
-   |-- 1. Enter Course -->|                       |                    |                  |
-   |                      |-- 2. enrollStudent -->|                    |                  |
-   |                      |                       |-- 3. findById ---->|                  |
-   |                      |                       |<-- course obj -----|                  |
-   |                      |                       |                                       |
-   |                      |                       |-- 4. Check isFull() ----------------->|
-   |                      |                       |<-- (false) ---------------------------|
-   |                      |                       |                                       |
-   |                      |                       |-- 5. Check completed prerequisites ->|
-   |                      |                       |   [Check missingPrereqs]              |
-   |                      |                       |                                       |
-   |                      |                       |-- 6. Add student to course roster --->|
-   |                      |                       |-- 7. Add course to student's list --->|
-   |                      |                       |-- 8. Save updated entities ---------->|
-   |                      |<-- Enrollment Object -|                                       |
-   |<-- Success Alert ----|                       |                                       |
+Student           ConsoleUI           EnrollmentService       CourseRepo       Student (Model)
+   |                  |                       |                    |                  |
+   |-- Enter Code --->|                       |                    |                  |
+   |                  |-- enrollStudent ----->|                    |                  |
+   |                  |                       |-- findById ------->|                  |
+   |                  |                       |<-- course obj -----|                  |
+   |                  |                       |                                       |
+   |                  |                       |-- Check course.isFull() ------------->|
+   |                  |                       |<-- (false, seats available) ----------|
+   |                  |                       |                                       |
+   |                  |                       |-- Check completed prerequisites ----->|
+   |                  |                       |   [Check missingPrereqs list]         |
+   |                  |                       |                                       |
+   |                  |                       |-- Add student to course roster ------>|
+   |                  |                       |-- Add course to student enrolled list>|
+   |                  |                       |-- Persist changes to Repository ----->|
+   |                  |<-- Enrollment Success-|                                       |
+   |<-- Alert Banner -|                       |                                       |
 ```
 
-### 7.4 Class Diagram / Component Diagram
+### 7.4 Class / Component Diagram
 
 ```
 +----------------------------------------------------+
@@ -301,38 +306,33 @@ Student               ConsoleUI           EnrollmentService       CourseRepo    
 
 ---
 
-## 8. Design Decisions & Rationale
+## 8. Design Decisions and Rationale
 
-1. **Layered Architecture over Monolithic Scripting**:
-   - *Rationale*: Separating model entities, repositories, service orchestrators, and UI guarantees that changes in the user interface do not affect business validation rules.
-2. **Generic Repository Interface (`Repository<T, ID>`)**:
-   - *Rationale*: Adopting the Data Access Object (DAO) pattern decouples the persistence layer. Currently backed by serialized files, it can seamlessly swap to JDBC/Hibernate without modifying any service code.
-3. **Strategy Pattern for Academic Grading**:
-   - *Rationale*: Universities frequently utilize distinct grading scales (e.g. 10.0 scale vs 4.0 scale). The Strategy Pattern permits hot-swapping grading algorithms at runtime via `ConfigManager`.
-4. **Custom Checked Exception Hierarchy**:
-   - *Rationale*: Using specialized checked exceptions (`CourseFullException`, `PrerequisiteNotMetException`, `AuthenticationException`) ensures explicit error handling and descriptive feedback to users.
-5. **Standard Java Serialization without External Libraries**:
-   - *Rationale*: Minimizes external dependencies, ensuring the project builds and runs on any standard Java Development Kit installation.
+1. **Separation of Layers:** Keeping Model, Repository, Service, and UI in distinct packages prevents console input/output from getting entangled with registration rules and validations.
+2. **Strategy Pattern for Grading:** Rather than writing hardcoded `if-else` blocks for grade conversions, the `GradingStrategy` interface allows switching grading schemes (Standard 4.0 vs VIT 10-point) at runtime without editing service code.
+3. **Factory Method for User Creation:** Using `UserFactory` ensures that all user creation logic, role defaults, and SHA-256 password hashing are handled consistently in one place.
+4. **Custom Checked Exception Hierarchy:** Custom exceptions like `CourseFullException`, `PrerequisiteNotMetException`, and `AuthenticationException` provide clear error messages to users rather than generic system crashes.
+5. **Standard Java Serialization:** Storing data via `ObjectOutputStream` allows the application to be self-contained, running directly without requiring MySQL or external database setup.
 
 ---
 
 ## 9. Implementation Details
 
-### Demonstration of Core OOP Principles
-- **Encapsulation**: All fields in `User`, `Student`, `Course`, and `Enrollment` are marked `private`. Mutations occur exclusively through validated setter methods or domain actions (such as `course.addStudent()`).
-- **Inheritance**: `Student`, `Instructor`, and `Administrator` extend the abstract base class `User`, inheriting core identification, authentication, and status attributes.
-- **Polymorphism**: The abstract methods `getRoleSpecificDetails()` and `getMaxCourseAllowance()` are dynamically dispatched at runtime based on the underlying subclass.
-- **Abstraction & Interfaces**: The `GradingStrategy` and `Repository<T, ID>` interfaces define contracts without exposing internal algorithmic or file storage mechanics.
+### Core OOP Principles Applied
+- **Encapsulation:** Model entities (`User`, `Student`, `Course`, `Enrollment`) keep fields `private`. Modification is only possible through validated setters and domain methods such as `course.addStudent()`. Collections are returned via `Collections.unmodifiableList()` to prevent external tampering.
+- **Inheritance:** `Student`, `Instructor`, and `Administrator` all inherit common fields (`userId`, `name`, `email`, `passwordHash`, `role`) from the abstract `User` class.
+- **Polymorphism:** Methods such as `getRoleSpecificDetails()` and `getMaxCourseAllowance()` are defined as abstract in `User` and overridden specifically in each subclass.
+- **Abstraction:** The service layer interacts with storage via the `Repository<T, ID>` interface, meaning the underlying storage mechanism can change without touching business logic.
 
-### Design Patterns Implemented
-- **Singleton Pattern**: `ConfigManager.getInstance()` ensures a globally accessible, thread-safe configuration context.
-- **Factory Method Pattern**: `UserFactory.createUser(...)` encapsulates polymorphic user instantiation.
-- **Strategy Pattern**: `StandardGradingStrategy` and `HonorsGradingStrategy` implement `GradingStrategy` to allow interchangeable evaluation schemes.
-- **Repository Pattern**: `FileUserRepository`, `FileCourseRepository`, and `FileEnrollmentRepository` abstract data persistence.
+### Design Patterns Used
+- **Singleton Pattern:** `ConfigManager` maintains a single, synchronized application-wide configuration instance for the active semester, data directory, and current grading scheme.
+- **Factory Method:** `UserFactory.createUser(...)` handles the creation of `Student`, `Instructor`, or `Administrator` objects based on role.
+- **Strategy Pattern:** `StandardGradingStrategy` and `HonorsGradingStrategy` implement `GradingStrategy` to provide interchangeable evaluation algorithms.
+- **Repository Pattern:** `FileUserRepository`, `FileCourseRepository`, and `FileEnrollmentRepository` handle file I/O operations cleanly.
 
 ---
 
-## 10. Screenshots & Results
+## 10. Screenshots and Results
 
 ### 10.1 Automated Test Runner Output
 ```
@@ -356,7 +356,7 @@ Student               ConsoleUI           EnrollmentService       CourseRepo    
 ------------------------------------------------------------
 ```
 
-### 10.2 Student Academic Transcript Generation
+### 10.2 Official Student Academic Transcript
 ```
 ========================================================================================
                      OFFICIAL ACADEMIC TRANSCRIPT - VIT Bhopal / VITyarthi University
@@ -375,7 +375,7 @@ Academic Standing: Dean's Honor List / Distinction
 ========================================================================================
 ```
 
-### 10.3 Course Analytics & Audit Output
+### 10.3 Course Performance Analytics Output
 ```
 ========================================================================================
                     COURSE ANALYTICS & GRADE AUDIT: CSE2001
@@ -397,52 +397,47 @@ Grade Distribution :
 
 ## 11. Testing Approach
 
-Testing adhered to a structured, multi-tier strategy:
-1. **Unit Testing**: Validating isolated logic including password hashing (`SecurityUtils`), user instantiation (`UserFactory`), and score mapping (`GradingStrategy`).
-2. **Integration Testing**: Testing repository save, retrieve, and auto-flush mechanisms with transient file stores.
-3. **Domain Constraint & Invariant Testing**:
-   - Verified that enrolling in a course with unsatisfied prerequisites throws `PrerequisiteNotMetException`.
-   - Verified that enrolling in a full course throws `CourseFullException`.
-   - Verified that attempting to register for the same course twice throws `ValidationException`.
-4. **Calculations Verification**: Validating the weighted cumulative GPA arithmetic against hand-computed expected results.
+The project was validated through an automated test suite (`SystemValidationTest.java`) containing 11 test cases:
+1. **UserFactory & Polymorphism:** Verifies correct subtype instantiation and role-specific credit capacities.
+2. **Security Hashing:** Verifies that SHA-256 produces predictable hashes and rejects invalid credentials.
+3. **Strategy Pattern:** Validates numerical-to-letter grade conversion on both 4.0 and 10.0 scales.
+4. **Prerequisite Enforcement:** Tests that missing prerequisites correctly throw `PrerequisiteNotMetException`.
+5. **Course Capacity Constraint:** Tests that registering past maximum capacity throws `CourseFullException`.
+6. **Duplicate Registration Prevention:** Confirms that enrolling in an active course twice throws `ValidationException`.
+7. **Course Drop Lifecycle:** Verifies that dropping a course updates enrollment status to `DROPPED` and frees course capacity.
+8. **GPA Accuracy:** Confirms that multi-course weighted GPA calculations match expected values mathematically.
 
 ---
 
 ## 12. Challenges Faced
 
-1. **Circular Prerequisite Deadlocks**:
-   - *Challenge*: Allowing administrators to set prerequisites risked inadvertent cycles (e.g. Course A requires Course B, which requires Course A).
-   - *Solution*: Implemented graph cycle detection during prerequisite assignment in `CourseService.addPrerequisite()`.
-2. **Dynamic GPA Recalculation across Variable Credits**:
-   - *Challenge*: Simple arithmetic averages fail when courses have variable credit weights (e.g. 4-credit Java vs 2-credit lab).
-   - *Solution*: Built a credit-weighted GPA aggregator in `EnrollmentService.recalculateGpa()` multiplying grade points by credits and dividing by total earned credits.
-3. **Concurrency & File Durability**:
-   - *Challenge*: Multiple enrollment actions in rapid succession could corrupt file state.
-   - *Solution*: Utilized `ConcurrentHashMap` combined with `synchronized` methods for critical write and flush operations.
+1. **Prerequisite Dependency Cycles:** When administrators add prerequisites, cyclic relationships (e.g., Course A requires Course B, which requires Course A) could lock students out indefinitely. This was resolved by adding validation in `CourseService.addPrerequisite()` to inspect existing prerequisite chains before saving.
+2. **Credit-Weighted Cumulative GPA:** Different courses have different credit values (e.g., 4 credits for theory vs 2 credits for lab). A standard arithmetic mean produces inaccurate GPAs. The calculation was implemented as $\frac{\sum (\text{GradePoint} \times \text{Credits})}{\sum \text{Credits}}$ across completed courses.
+3. **Scanner Input Trapping in CLI:** In Java console programs, reading integers via `scanner.nextInt()` leaves newline characters in the buffer, causing subsequent string inputs to skip. This was resolved by reading all console input uniformly via `scanner.nextLine()` and parsing numerical values explicitly.
 
 ---
 
-## 13. Learnings & Key Takeaways
+## 13. Learnings and Key Takeaways
 
-- Practical mastery of core **OOP principles**: Encapsulation, Polymorphism, Inheritance, and Abstraction in a real-world enterprise domain.
-- Effective adoption of **GoF Software Design Patterns** (Singleton, Factory Method, Strategy, DAO) to build clean, maintainable systems.
-- Designing self-contained **automated test suites** in pure Java to guarantee high software reliability and regressions prevention.
-- Implementing robust **exception handling architectures** distinguishing business constraint violations from fatal runtime errors.
+- Gained hands-on experience in building a complete, layered Java application using core OOP principles.
+- Learned how to apply GoF design patterns (Factory, Strategy, Singleton, DAO) to real practical requirements rather than textbook examples.
+- Understood the importance of defensive programming, unmodifiable collections, and custom exception hierarchies for maintaining domain integrity.
+- Realized the value of writing dedicated unit and integration tests to verify edge cases early in development.
 
 ---
 
 ## 14. Future Enhancements
 
-1. **Graphical User Interface (GUI) / Web Portal**: Transition the terminal CLI to a modern JavaFX desktop app or Spring Boot + React web application.
-2. **Relational Database Migration**: Transition file serialization to PostgreSQL / MySQL via Hibernate ORM.
-3. **Automated Notification System (Observer Pattern)**: Send automated email alerts to students when course grades or prerequisite announcements are published.
-4. **Timetable & Clash Detection**: Incorporate weekly schedule slot allocations (e.g. Monday 9-10 AM) and automated conflict detection.
+1. **Graphical User Interface:** Build a JavaFX desktop UI or a Spring Boot web frontend.
+2. **Database Integration:** Connect to PostgreSQL or MySQL using JDBC or Hibernate ORM.
+3. **Email Notification Service:** Implement the Observer pattern to notify students when grades or announcements are posted.
+4. **Weekly Timetable Scheduling:** Add slot conflict detection to prevent overlapping class schedules.
 
 ---
 
 ## 15. References
 
-1. Oracle Java SE Documentation: [https://docs.oracle.com/en/java/](https://docs.oracle.com/en/java/)
-2. Gamma, E., Helm, R., Johnson, R., & Vlissides, J. *Design Patterns: Elements of Reusable Object-Oriented Software* (Addison-Wesley).
-3. Bloch, Joshua. *Effective Java* (3rd Edition, Addison-Wesley).
-4. VIT Course Syllabus for Object-Oriented Programming (Java).
+1. Oracle Java SE Documentation: https://docs.oracle.com/en/java/
+2. Gamma, E., Helm, R., Johnson, R., & Vlissides, J. *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley.
+3. Bloch, Joshua. *Effective Java* (3rd Edition). Addison-Wesley.
+4. VIT Academic Regulations and Course Syllabus for Object-Oriented Programming (Java - CSE2006).
