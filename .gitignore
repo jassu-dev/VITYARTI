@@ -1,0 +1,13 @@
+# Compiled class files
+bin/
+*.class
+
+# Test execution transient files
+data/test_*
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+*.iml
+.idea/
+.vscode/
